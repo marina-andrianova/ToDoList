@@ -23,7 +23,8 @@ const App = () => {
             <SearchPanel />
             <ItemStatusFilter />
             </div>
-            <TodoList todos = {todoDate}/>
+            <TodoList todos = {todoDate}
+                      onDeleted = {(id) => console.log('deleted', id) }/>
         </div>
     )
 };

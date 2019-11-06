@@ -21,23 +21,27 @@ export default class TodoListItem extends Component {
         important: false
     };
     onLabelClick = () => {
-        this.setState({ //state изменяется ТОЛЬКО через setState
-            done: true,
+        this.setState(({done}) => { //state изменяется ТОЛЬКО через setState
+            return {
+                done: !done//тоже что и в коде ниже только с деструктуризацией из state
+            }
         })
     };
     onMarkImportant = () => {
-        this.setState({
-            important: true,
+        this.setState((state) => { //используем такую конструкцию когда надо совершить отмену (перезапись) состояния при повторном нажатии на кнопку
+            return {
+                important: !state.important //меняем на протиповоложное состояние из state
+            }
         })
     };
 
 
     render() {
         const {label} = this.props;
-        const {done,important} = this.state;
+        const {done, important} = this.state;
 
         let classNames = 'todo-list-item';
-        if(done) {
+        if (done) {
             classNames += ' done';
         }
         if (important) {
@@ -45,7 +49,7 @@ export default class TodoListItem extends Component {
         }
 
         return (
-            <span className={classNames}>
+        <span className={classNames}>
             <span
                 className="todo-list-item-label"
                 onClick={this.onLabelClick}>
@@ -58,8 +62,9 @@ export default class TodoListItem extends Component {
       </button>
 
       <button type="button"
-              className="btn btn btn-danger btn-sm float-right">
-        <i className="fa fa-trash-o" />
+              className="btn btn btn-danger btn-sm float-right"
+              onClick={this.props.onDeleted}>
+        <i className="fa fa-trash-o"/>
       </button>
         </span>
     )
