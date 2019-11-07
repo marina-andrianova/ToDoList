@@ -15,9 +15,9 @@ export default class App extends Component {
 
     state = {
         todoDate: [
-            {label: 'Drink coffee', important: false, id: 1},
-            {label: 'Going to the gum', important: true, id: 2},
-            {label: 'Have a breakfast ', important: false, id: 3}
+            {label: 'Drink coffee',done: false, important: false, id: 1},
+            {label: 'Going to the gum',done: false, important: true, id: 2},
+            {label: 'Have a breakfast ',done: false, important: false, id: 3}
         ]
     };
 
@@ -44,7 +44,6 @@ export default class App extends Component {
             important: false,
             id: this.maxId++
         };
-
         //добавляем элемент в массив
         this.setState(({todoDate}) => {
             const newArr = [ // создаем массив
@@ -58,6 +57,31 @@ export default class App extends Component {
         })
     };
 
+    toggleDone = (id) => {
+        console.log("Done", id)//id-потому что мы можем определить какой элемент отмечен,удален и т.д. по его id
+    };
+
+    toggleImportant = (id) => {
+        this.setState(({todoDate}) => {
+            const idx = todoDate.findIndex((el) => el.id === id);
+
+            //1. изменяем объект
+            const oldItem = todoDate[idx];
+            const newItem = {...oldItem, important: !oldItem.important}; //приходится опять добавлять массив тк нельзя изменять состояние
+
+            //2. конструируем новый массив(на примере deleteItem)
+            const newArray = [
+                ...todoDate.slice(0, idx), //копируем все элементы до измененного
+                newItem,//вствляем изменненый элемент
+                ...todoDate.slice(idx + 1)//все элементы после измененного
+            ];
+
+            return {
+                todoDate: newArray
+            }
+        })
+    };
+
     render() {
         return (
             <div className="todo-app">
@@ -67,7 +91,9 @@ export default class App extends Component {
                     <ItemStatusFilter/>
                 </div>
                 <TodoList todos={this.state.todoDate} //меняем тк это часть стэйта(было-{todoDate}
-                          onDeleted={this.deleteItem}/>
+                          onDeleted={this.deleteItem}
+                          onToggleDone={this.toggleDone}
+                          onToggleImportant={this.toggleImportant}/>
                 <ItemAddForm onAdd={this.addItem}/>
             </div>
         )

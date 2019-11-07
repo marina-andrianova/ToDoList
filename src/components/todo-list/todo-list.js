@@ -3,7 +3,7 @@ import TodoListItem from '../todo-list-item/todo-list-item';
 import './todo-list.css';
 //работаем со всей коллексией ДЕЛ
 
-const TodoList = ({todos, onDeleted}) => {
+const TodoList = ({todos, onDeleted, onToggleDone, onToggleImportant}) => {
 
     const elements = todos.map((item) => {
         // label = {item.label}
@@ -13,18 +13,20 @@ const TodoList = ({todos, onDeleted}) => {
         const {id, ...itemProps} = item;//деструк туризация,чтобы в TodoListItem передать только label и important
         return (
             //уникальный ключ чтобы убрать ошибку в console
-            <li key = {id} className="list-group-item">
+            <li key={id} className="list-group-item">
                 <TodoListItem {...itemProps}
-                onDeleted = {() => onDeleted(id) }/>
+                              onDeleted={() => onDeleted(id)}
+                              onToggleImportant={() => onToggleImportant(id)}
+                              onToggleDone={() => onToggleDone(id)}/>
             </li>
         )
     });
 
     return (
         <ul className="list-group todo-list">
-            { elements }
+            {elements}
         </ul>
     )
 };
 
-export default  TodoList;
+export default TodoList;
